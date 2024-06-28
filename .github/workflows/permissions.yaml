@@ -1,0 +1,28 @@
+name: Check Repository Permissions
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: 'Repository name'
+        required: true
+        default: 'giffgaff/github-actions-workflows'
+      username:
+        description: 'Username to check permissions for'
+        required: true
+        default: 'georgehillgg'
+
+jobs:
+  check-permissions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check permissions
+        run: gh api repos/giffgaff/${{ github.event.inputs.repository }}/collaborators/${{ github.event.inputs.username }}/permission
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Output permissions
+        run: echo "The permission of ${{ github.event.inputs.username }} is ${{ steps.check.outputs.permission }}"
