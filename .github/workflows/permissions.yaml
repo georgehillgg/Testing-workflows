@@ -19,6 +19,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install GitHub CLI
+        run: |
+          sudo apt update
+          sudo apt install gh -y
+
       - name: Check permissions
         run: gh api repos/giffgaff/${{ github.event.inputs.repository }}/collaborators/${{ github.event.inputs.username }}/permission
         env:
